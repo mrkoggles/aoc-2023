@@ -5,15 +5,15 @@ import (
 	"testing"
 )
 
-
 type testCase struct {
-	filePath string; 
-	expectedOutput int;
+	filePath       string
+	expectedOutput int
 }
 
 var testCases = []testCase{
-	{ "sample-pt1.txt", 142 },
-	{ "dataset-pt1.txt", 54601 },
+	{"sample-pt1.txt", 142},
+	{"sample-pt2.txt", 281},
+	{"dataset.txt", 54601},
 }
 
 func TestProblem1(t *testing.T) {
@@ -25,25 +25,24 @@ func TestProblem1(t *testing.T) {
 	}
 }
 
-
-
-
 type extractionTestCase struct {
-	input string;
-	expected int;
+	input    string
+	expected int
 }
 
-
-var extractionTestCases = []extractionTestCase {
-	{ "12", 12 }, 
-	{ "abc5de1", 51 },
+var extractionTestCases = []extractionTestCase{
+	{"12", 12},
+	{"abc5de1", 51},
+	{"onetwothree", 13},
+	{"1two3", 13},
 }
+
 func TestExtract(t *testing.T) {
 	for _, test := range extractionTestCases {
-		
-		actual := problem1.ExtractFirstAndLastNumerics(test.input)	
+
+		actual := problem1.ExtractFirstAndLastNumerics(test.input)
 		if actual != test.expected {
-			t.Fatalf("Expected: %d but was actually: %d", test.expected, actual);
-		}	
+			t.Fatalf("Expected: %d but was actually: %d", test.expected, actual)
+		}
 	}
 }

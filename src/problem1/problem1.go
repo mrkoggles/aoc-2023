@@ -2,9 +2,10 @@ package problem1
 
 import (
 	"bufio"
+	"fmt"
 	"os"
 	"strconv"
-	"fmt"
+	"strings"
 )
 
 func Solve(filePath string) int {
@@ -13,8 +14,7 @@ func Solve(filePath string) int {
 		panic(err)
 	}
 
-
-	defer fi.Close() 
+	defer fi.Close()
 
 	scanner := bufio.NewScanner(fi)
 	var sum int = 0
@@ -22,16 +22,16 @@ func Solve(filePath string) int {
 		result := ExtractFirstAndLastNumerics(scanner.Text())
 		sum = sum + result
 	}
-	return sum;
+	return sum
 }
 
-func ExtractFirstAndLastNumerics(input string) (int) {
-	
-	var first int = -1 
+func ExtractFirstAndLastNumerics(input string) int {
+
+	var first int = -1
 	var last int = -1
-	for _, char := range input {
-		charAsString := string(byte(char))
-		numeral, err := strconv.Atoi(charAsString)
+	for i := 0; i < len(input); i++ {
+
+		numeral, err := PrefixIsNumeral(input[i:])
 		if err != nil {
 			continue
 		}
@@ -40,13 +40,30 @@ func ExtractFirstAndLastNumerics(input string) (int) {
 		if first == -1 {
 			first = numeral
 		}
-		
+	}
+
+	if (first == -1) || (last == -1) {
+		panic("Could not extract first and last numerics")
 	}
 
 	outputStr := fmt.Sprintf("%d%d", first, last)
-	output, err := strconv.Atoi(outputStr)	
+	output, err := strconv.Atoi(outputStr)
 	if err != nil {
 		panic(err)
 	}
-	return output 
+	return output
+}
+
+var numerals = []string{"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"}
+
+func PrefixIsNumeral(input string) (int, error) {
+
+	for index, numeral := range numerals {
+		indexAsString := strconv.Itoa(index)
+		isMatch := strings.HasPrefix(input, indexAsString) || strings.HasPrefix(input, numeral)
+		if isMatch {
+			return index, nil
+		}
+	}
+	return 0, fmt.Errorf(`Could not find a prefix that matched`)
 }
